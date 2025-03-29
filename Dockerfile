@@ -1,21 +1,26 @@
-#stage1 base image 994mb 
+# Base image (OS)
 
-FROM python:3.7 AS builder
+FROM python:3.9
 
-WORKDIR /app
-
-COPY  requirements.txt .
-
-RUN pip install -r requirements.txt
-
-# stage 2 base image 400 mb
-
-FROM python:3.7-slim
+# Working directory
 
 WORKDIR /app
 
-COPY --from=builder /usr/local/lib/python3.7/site-packages/ /usr/local/lib/python3.7/site-packages/
+# Copy src code to container
 
 COPY . .
 
-ENTRYPOINT [ "python", "run.py" ]
+# Run the build commands
+
+RUN pip install -r requirements.txt
+
+# expose port 80
+
+EXPOSE 80
+
+# serve the app / run the app (keep it running)
+
+ENTRYPOINT [ "python" ]
+
+CMD ["run.py"]
+
